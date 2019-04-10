@@ -24,6 +24,7 @@ RUN dnf install -y dotnet-sdk-2.2
 
 # Install and configure the Q# beta stack
 WORKDIR /root/ms_quantum
+RUN dnf clean all
 ADD ms_quantum.tar.gz /root/ms_quantum
 RUN ls
 RUN dotnet tool install --configfile NuGet.config -g Microsoft.Quantum.IQSharp

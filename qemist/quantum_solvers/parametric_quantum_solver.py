@@ -17,25 +17,23 @@ class ParametricQuantumSolver(abc.ABC):
         n_qubits (int): The number of qubits in the circuit.
     """
 
-    def __init__(self, molecule, anstatz):
+    def __init__(self, molecule, anstatz, mean_field=None):
         self.initial_wavefunction = None
         self.n_qubits = None
         self.amplitude_dimension = None
-        pass
 
     @abc.abstractmethod
     def simulate(self, amplitudes):
         """Performs an energy simulation for the given amplitudes.
 
         Args:
-            amplitudes (numpy.array): The amplitudes to use in the simulation.
+            amplitudes (list): The ampltudes to use in the simulation.
 
         Returns:
             float: The energy from the simulation.
 
         Raises:
-            ValueError: If amplitudes.shape doesn't equal
-            (self.amplitude_dimension, 1).
+            ValueError: If len(ampltudes) doesn't equal amplitude_dimension.
         """
         pass
 
