@@ -7,7 +7,7 @@ Welcome to QEMIST's documentation!
 
    installation
    refman/modules
-
+   end_to_end
 
 
 Indices and tables
