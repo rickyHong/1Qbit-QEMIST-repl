@@ -60,6 +60,14 @@ class VQESolverTest(unittest.TestCase):
         # the simulation call.
         self.assertEqual(energy, 3)
 
+    def test_get_rdm_no_sim(self):
+        """Tests that exception is raised when calling `get_rdm` before `simulate`
+        """
+        solver = VQESolver()
+        solver.hardware_backend_type = MockQuantumSolver
+        solver.ansatz_type = MockQuantumSolver.Ansatze.UCCSD
+
+        self.assertRaises(RuntimeError, solver.get_rdm)
 
 if __name__ == "__main__":
     unittest.main()
