@@ -42,10 +42,16 @@ class ParametricQuantumSolver(abc.ABC):
         """ Returns the RDM from the simulation.
 
         This is intended to be called after the simulation loop of the calling
-        code has converged to be passed on to problem decompositions.
+        code has converged to be passed on to problem decompositions.  In a
+        concrete implementation, the `simulate` function would set the necessary
+        internal state for the class so that this function can return the
+        reduced density matrix.
 
         Returns:
             tuple(numpy.array, numpy.array): The one- and two-element RDM
             matrices.
+
+        Raises:
+            RuntimeError: If no simulation has been run.
         """
         pass
