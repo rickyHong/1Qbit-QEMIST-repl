@@ -11,7 +11,7 @@ setuptools.setup(
     description="Quantum chemistry simulation library.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/1QB-Information-Technologies/QEMIST",
+    url="https://github.com/1QB-Information-Technologies/openqemist",
     packages=setuptools.find_packages(),
     install_requires=['pyscf==1.6', 'numpy', 'scipy'],
     classifiers=[

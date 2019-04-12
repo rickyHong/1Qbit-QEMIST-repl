@@ -50,8 +50,6 @@ class DMETProblemDecomposition(ProblemDecomposition):
         print(' \t*** DMET Cycle Done *** ')
         print(' \tDMET Energy ( a.u. ) = '+'{:17.10f}'.format(dmet_energy))
         print(' \tChemical Potential   = '+'{:17.10f}'.format(chemical_potential))
-        # print(' ')
-
 
         return dmet_energy
 
