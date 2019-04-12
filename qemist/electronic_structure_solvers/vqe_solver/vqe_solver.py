@@ -27,9 +27,8 @@ class VQESolver(ElectronicStructureSolver):
     andsatz choice.
 
     Attributes:
-        hardware_backend_type (subclass of
-            qemist.quantum_solver.ParametricQuantumSolver): A type for the
-            backend instance that is automatically constructed.
+        hardware_backend_type (subclass of ParametricQuantumSolver): A type for
+            the backend instance that is automatically constructed.
         ansatz_type (subclass of Enum): Type of ansatz that is supported by the
             backend.
         optimizer (function): Function that is called to optimize.
@@ -107,5 +106,10 @@ class VQESolver(ElectronicStructureSolver):
         from scipy.optimize import minimize
         result = minimize(backend, amplitudes, method='SLSQP',
                 options={'disp':False, 'maxiter': 15000})
+
+        print("\n\t\tOptimal UCCSD Singlet Energy: {}".format(result.fun))
+        print("\t\tOptimal UCCSD Singlet Amplitudes: {}".format(result.x))
+        print("\t\tNumber of Iterations : ", result.nit)
+        print("\t\tNumber of Function Evaluations : ", result.nfev)
 
         return result.fun
