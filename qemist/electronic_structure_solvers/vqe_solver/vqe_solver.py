@@ -34,9 +34,11 @@ class VQESolver(ElectronicStructureSolver):
         optimizer (function): Function that is called to optimize.
         initial_amplitude_function (function): Function that returns the initial
             amplitudes used for the optimization.
+        verbose (boolean): Controls the verbosity of the default optimizer.
     """
 
     def __init__(self):
+        self.verbose = True
         self.hardware_backend_type = None
         self.hardware_backend = None
         self.ansatz_type = None
@@ -107,9 +109,10 @@ class VQESolver(ElectronicStructureSolver):
         result = minimize(backend, amplitudes, method='SLSQP',
                 options={'disp':False, 'maxiter': 15000})
 
-        print("\n\t\tOptimal UCCSD Singlet Energy: {}".format(result.fun))
-        print("\t\tOptimal UCCSD Singlet Amplitudes: {}".format(result.x))
-        print("\t\tNumber of Iterations : ", result.nit)
-        print("\t\tNumber of Function Evaluations : ", result.nfev)
+        if self.verbose:
+            print("\n\t\tOptimal UCCSD Singlet Energy: {}".format(result.fun))
+            print("\t\tOptimal UCCSD Singlet Amplitudes: {}".format(result.x))
+            print("\t\tNumber of Iterations : ", result.nit)
+            print("\t\tNumber of Function Evaluations : ", result.nfev)
 
         return result.fun
