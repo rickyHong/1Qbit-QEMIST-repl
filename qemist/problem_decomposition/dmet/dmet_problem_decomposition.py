@@ -14,7 +14,7 @@ from . import _helpers as helpers
 class DMETProblemDecomposition(ProblemDecomposition):
 
     def __init__(self):
-        self.verbose = False
+        self.verbose = True
         self.electronic_structure_solver = CCSDSolver()
         self.electron_localization_method = iao_localization
 
@@ -47,9 +47,10 @@ class DMETProblemDecomposition(ProblemDecomposition):
         niter = len(energy)
         dmet_energy = energy[niter-1]
 
-        print(' \t*** DMET Cycle Done *** ')
-        print(' \tDMET Energy ( a.u. ) = '+'{:17.10f}'.format(dmet_energy))
-        print(' \tChemical Potential   = '+'{:17.10f}'.format(chemical_potential))
+        if self.verbose:
+            print(' \t*** DMET Cycle Done *** ')
+            print(' \tDMET Energy ( a.u. ) = '+'{:17.10f}'.format(dmet_energy))
+            print(' \tChemical Potential   = '+'{:17.10f}'.format(chemical_potential))
 
         return dmet_energy
 
@@ -58,16 +59,20 @@ class DMETProblemDecomposition(ProblemDecomposition):
         onerdm_low = helpers._low_rdm(orbitals.active_fock, orbitals.number_active_electrons)
 
         niter = len(energy_list)+1
-        print(" \tIteration = ", niter)
-        print(' \t----------------')
-        print(' ')
+
+        if self.verbose:
+            print(" \tIteration = ", niter)
+            print(' \t----------------')
+            print(' ')
 
         number_of_electron = 0.0
         energy_temp = 0.0
 
         for i, norb in enumerate(orb_list):
-            print("\t\tFragment Number : # ", i+1)
-            print('\t\t------------------------')
+            if self.verbose:
+                print("\t\tFragment Number : # ", i+1)
+                print('\t\t------------------------')
+
             t_list=[]
             t_list.append(norb)
             temp_list = orb_list2[i]
@@ -99,12 +104,14 @@ class DMETProblemDecomposition(ProblemDecomposition):
             # Sum up the number of electrons
             number_of_electron += np.trace(one_rdm[ : t_list[0], : t_list[0]])
 
-            print("\t\tFragment Energy                 = "+'{:17.10f}'.format(fragment_energy))
-            print("\t\tNumber of Electrons in Fragment = "+'{:17.10f}'.format(np.trace(one_rdm)))
-            print('')
+            if self.verbose:
+                print("\t\tFragment Energy                 = "+'{:17.10f}'.format(fragment_energy))
+                print("\t\tNumber of Electrons in Fragment = "+'{:17.10f}'.format(np.trace(one_rdm)))
+                print('')
+
+
         energy_temp += orbitals.core_constant_energy
         energy_list.append(energy_temp)
-        print('')
 
         return number_of_electron - orbitals.number_active_electrons
 
