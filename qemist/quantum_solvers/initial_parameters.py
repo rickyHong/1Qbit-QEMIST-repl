@@ -1,8 +1,28 @@
+"""Prepare the initial amplitudes for quantum simulation.
+
+The electronic structure calculation employing the 
+second-order Møller–Plesset perturbation theory (MP2)  
+to prepare the initial T2 amplitudes is done here.
+
+"""
+
 def mp2_intitial_amplitudes(molecule, mean_field):
     """ Computes and prepares the MP2 inital amplitudes.
 
-    Computed the inital ampltudes with PySCF, then reorders the elements
-    into the QEMIST convention.
+    Compute the inital amplitudes with PySCF MP2 calculation, 
+    and then reorders the elements into the QEMIST convention.
+
+    MP2 only has doubles (T2) amplitudes, thus the single (T1) amplitudes 
+    are set to a small non-zero value and added.
+    
+    The ordering for QEMIST is single, double (diagonal), double (non-diagonal).
+
+    Args:
+        molecule (pyscf.gto.Mole): The molecule to simulate.
+        mean_field (pyscf.scf.RHF): The mean field of the molecule.
+
+    Returns:
+        list: The initial amplitudes (float64).
     """
     from pyscf import mp
     import numpy as np

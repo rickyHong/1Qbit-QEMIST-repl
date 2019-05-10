@@ -1,15 +1,22 @@
+"""Construct one-particle RDM for DMET calculation.
+
+Construction of the one-particle reduced density matrix (RDM) 
+is done here.
+
 """
-A code for constructing one-particle RDM for DMET calculation
-"""
+
 import numpy as np
 from functools import reduce
 
 def dmet_low_rdm(active_fock, number_active_electrons):
-    """
-    Calculate one-particle RDM from low-level calculation results
-    :param active_fock: fock from low level calculation
-    :param number_active_electrons: number of electrons in the entire system
-    :return: one-particle RDM
+    """Construct the one-particle RDM from low-level calculation.
+
+    Args: 
+        active_fock (numpy.array): Fock matrix from low-level calculation (float64).
+        number_active_electrons (int): Number of electrons in the entire system.
+
+    Returns:
+        onerdm (numpy.array): One-particle RDM of the low-level calculation (float64).
     """
 
     # Extract the occupied part of the one-particle RDM
@@ -23,13 +30,18 @@ def dmet_low_rdm(active_fock, number_active_electrons):
     return onerdm
 
 def dmet_fragment_rdm(t_list, bath_orb, core_occupied, number_active_electrons):
-    """
-    construct the one-particle RDM for the core orbitals
-    :param t_list: Number of fragment & bath orbitals
-    :param bath_orb: Bath orbitals
-    :param core_occupied: Core occupied part of the MO coefficients
-    :param number_active_electrons: Number of active electrons in the entire system
-    :return: number of orbitals, number of electrons in the fragments, and the core RDM
+    """Construct the one-particle RDM for the core orbitals.
+
+    Args: 
+        t_list (list): Number of [0] fragment & [1] bath orbitals (int).
+        bath_orb (numpy.array): The bath orbitals (float64).
+        core_occupied (numpy.array): Core occupied part of the MO coefficients (float64).
+        number_active_electrons (int): Number of electrons in the entire system.
+
+    Returns:
+        number_orbitals (int): Number of orbitals for fragment calculation.
+        number_electrons (int): Number of electrons for fragment calulation.
+        core_occupied_onerdm (numpy.array): Core part of the one-particle RDM (float64).
     """
 
     # Obtain number of active orbitals

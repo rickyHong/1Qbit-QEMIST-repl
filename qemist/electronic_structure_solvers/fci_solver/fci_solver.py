@@ -1,3 +1,11 @@
+"""Perform Full CI calculation.
+
+The electronic structure calculation employing the 
+full configuration interaction (CI) method 
+is done here.
+
+"""
+
 from pyscf import ao2mo, fci, scf
 from functools import reduce
 import numpy as np
@@ -5,6 +13,19 @@ import numpy as np
 from ..electronic_structure_solver import ElectronicStructureSolver
 
 class FCISolver(ElectronicStructureSolver):
+    """Perform Full CI calculation.
+    
+    Uses the Full CI method to solve the electronic structure problem.
+    PySCF program will be utilized. 
+    Users can also provide a function that takes a `pyscf.gto.Mole` 
+    as its first argument and `pyscf.scf.RHF` as its second.
+
+    Attributes:
+        cisolver (pyscf.fci.direct_spin0.FCI): The Full CI object.
+        ci (numpy.array): The CI wavefunction (float64).
+        norb (int): The number of molecular orbitals.
+        nelec (int): The number of electrons.
+    """
 
     def __init__(self):
         self.ci = None
@@ -13,6 +34,20 @@ class FCISolver(ElectronicStructureSolver):
         self.cisolver = None
 
     def simulate(self, molecule, mean_field=None):
+        """Perform the simulation (energy calculation) for the molecule.
+
+        If the mean field is not provided it is automatically calculated.
+        `pyscf.ao2mo` is used to transform the AO integrals into
+        MO integrals.
+
+        Args:
+            molecule (pyscf.gto.Mole): The molecule to simulate.
+            mean_field (pyscf.scf.RHF): The mean field of the molecule.
+
+        Returns:
+            float64: The Full CI energy (energy).
+        """
+
         # Calculate the mean field if the user has not already done it.
         if not mean_field:
             mean_field = scf.RHF(molecule)
@@ -37,8 +72,19 @@ class FCISolver(ElectronicStructureSolver):
 
         return energy
 
-
     def get_rdm(self):
+        """Calculate the 1- and 2-particle RDMs.
+
+        Calculate the Full CI reduced density matrices. 
+
+        Returns:
+            (numpy.array, numpy.array): One & two-particle RDMs (fci_onerdm & fci_twordm, float64).
+
+        Raises:
+            RuntimeError: If no simulation has been run.
+        """        
+
+        # Check if Full CI is performed
         if not self.norb or not self.nelec:
             raise RuntimeError("Cannot retrieve RDM because no simulation has been run.")
 

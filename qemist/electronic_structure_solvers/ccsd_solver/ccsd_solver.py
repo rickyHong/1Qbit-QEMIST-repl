@@ -1,3 +1,11 @@
+"""Perform CCSD calculation.
+
+The electronic structure calculation employing the 
+coupled-cluster singles and doubles (CCSD) method 
+is done here.
+
+"""
+
 import warnings
 
 from pyscf import cc, scf
@@ -5,11 +13,33 @@ from pyscf import cc, scf
 from ..electronic_structure_solver import ElectronicStructureSolver
 
 class CCSDSolver(ElectronicStructureSolver):
+    """Perform CCSD calculation.
+    
+    Uses the CCSD method to solve the electronic structure problem.
+    PySCF program will be utilized. 
+    Users can also provide a function that takes a `pyscf.gto.Mole` 
+    as its first argument and `pyscf.scf.RHF` as its second.
 
+    Attributes:
+        cc_fragment (pyscf.cc.CCSD): The coupled-cluster object.
+    """
+    
     def __init__(self):
         self.cc_fragment = None
 
     def simulate(self, molecule, mean_field=None):
+        """Perform the simulation (energy calculation) for the molecule.
+
+        If the mean field is not provided it is automatically calculated.
+
+        Args:
+            molecule (pyscf.gto.Mole): The molecule to simulate.
+            mean_field (pyscf.scf.RHF): The mean field of the molecule.
+
+        Returns:
+            float64: CCSD energy (total_energy).
+        """
+
         # Calculate the mean field if the user has not already done it.
         if not mean_field:
             mean_field = scf.RHF(molecule)
@@ -32,6 +62,20 @@ class CCSDSolver(ElectronicStructureSolver):
         return total_energy
 
     def get_rdm(self):
+        """Calculate the 1- and 2-particle RDMs.
+
+        Calculate the CCSD reduced density matrices. 
+        The CCSD lambda equation will be solved for calculating 
+        the RDMs. 
+
+        Returns:
+            (numpy.array, numpy.array): One & two-particle RDMs (cc_onerdm & cc_twordm, float64).
+
+        Raises:
+            RuntimeError: If no simulation has been run.
+        """        
+
+        # Check if CCSD calculation is performed
         if not self.cc_fragment:
             raise RuntimeError("Cannot retrieve RDM because no simulation has been run.")
 

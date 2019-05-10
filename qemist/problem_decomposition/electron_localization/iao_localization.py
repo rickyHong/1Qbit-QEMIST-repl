@@ -1,3 +1,17 @@
+"""Perform IAO localization.
+
+The orbital localization of the canonical orbitals 
+using Intrinsic Atomic Orbitals (IAO) localization is done here.
+`pyscf.lo` is used.
+
+Note that minimal basis cannot be used for IAO because 
+the idea of IAO is to map on minao minimal basis set.
+
+For details, refer to:
+G. Knizia, JCTC 9, 4834-4843 (2013).
+
+"""
+
 from pyscf import gto
 from pyscf.lo import iao
 from functools import reduce
@@ -6,12 +20,14 @@ import numpy as np
 import scipy
 
 def iao_localization(mol, mf):
-    """
-    Construct IAO (Localize the canonical orbitals obtained from
-    low-level SCF calculations)for DMET Calculation!!!
-    :param mol: The molecule object from PySCF
-    :param mf: The mean field object from PySCF
-    :return: The localized Intrinsic atomic orbitals
+    """Localize the orbitals using IAO localization.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate.
+        mf (pyscf.scf.RHF): The mean field of the molecule.
+
+    Returns:
+        numpy.array: The localized orbitals (float64).
     """
 
     #   Construct IAO from occupied orbitals
@@ -20,18 +36,20 @@ def iao_localization(mol, mf):
     #   Construct IAO from complementary space
     iao2 = _iao_complementary_orbitals(mol, iao1)
 
-    #   Gather two and Assign the IAOs to atoms, rearrange them
+    #   Gather two and assign the IAOs to atoms, rearrange them
     iao_lo = _iao_atoms(mol, iao1, iao2)
 
     return iao_lo
 
-
 def _iao_occupied_orbitals(mol, mf):
-    """
-    Get the IAO for occupied space
-    :param mol: The molecule object from PySCF
-    :param mf: The mean field object from PySCF
-    :return: IAO for occupied space
+    """Get the IAOs for occupied space.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate.
+        mf (pyscf.scf.RHF): The mean field of the molecule.
+
+    Returns:
+        iao_active (numpy.array): The localized orbitals for the occupied space (float64).
     """
 
     #   Get MO coefficient of occupied MOs
@@ -40,7 +58,7 @@ def _iao_occupied_orbitals(mol, mf):
     #   Get mol data in minao basis
     min_mol = iao.reference_mol(mol)
 
-    #   Calculate the Overlaps for total basis
+    #   Calculate the overlaps for total basis
     s1 = mol.intor_symmetric('int1e_ovlp')
 
     #   ... for minao basis
@@ -72,14 +90,15 @@ def _iao_occupied_orbitals(mol, mf):
 
     return iao_active
 
-
 def _iao_complementary_orbitals(mol, iao_ref):
-    """
-    Get IAO for complementary space (Virtual Orbitals)
-    :param mol: The molecule object from PySCF
-    :param mf: The mean field object from PySCF
-    :param iao_ref: The IAO for occupied
-    :return:
+    """Get the IAOs for complementary space (virtual orbitals).
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate.
+        iao_ref (numpy.array): IAO in occupied space (float64).
+
+    Returns:
+        iao_comp (numpy.array): IAO in complementary space (float64).
     """
 
     #   Get the total number of AOs
@@ -122,13 +141,16 @@ def _iao_complementary_orbitals(mol, iao_ref):
 
     return iao_comp
 
-
 def _iao_count_active(mol, min_mol):
-    """
-    Figure out the basis functions matching with MINAO
-    :param mol: The molecule object for the basis set used
-    :param min_mol: The molecule object for the minimal basis MINAO
-    :return: Number of active orbitals, and the list of active orbitals
+    """Figure out the basis functions matching with MINAO.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate.
+        min_mol (numpy.array): The molecule to simulate in minao basis.
+
+    Returns:
+        number_active (int): Number of active orbitals.
+        active_number_list (list): List of active orbitals (int).
     """
 
     #   Initialize the list
@@ -152,15 +174,20 @@ def _iao_count_active(mol, min_mol):
 
     return number_active, active_number_list
 
-
 def _iao_complementary_space(iao_ref, s, number_inactive):
+    """Determine the complementary space orbitals.
+
+    Args:
+        iao_ref (numpy.array): IAO in occupied space.
+        (float64)
+        s (numpy.array): The overlap matrix.
+        (float64)
+        number_inactive (int): The number of inactive orbitals.
+
+    Returns:
+        eigen_vectors (numpy.array): The inactive part in IAO (float64).
     """
-    Determine the complementary space
-    :param iao_ref: IAO for occupied space
-    :param s: the overlap matrix
-    :param number_inactive: The number of inactive (core) orbitals
-    :return: the inactive part of the MO coefficients in IAO
-    """
+
     #   Construct the "density matrix" for active space
     density_active = np.dot(iao_ref, iao_ref.T)
 
@@ -173,16 +200,17 @@ def _iao_complementary_space(iao_ref, s, number_inactive):
 
     return eigen_vectors
 
-
-#
 def _iao_atoms(mol, iao1, iao2):
-    """
-    Assign IAO to atom centers and rearrange the IAOs.
-    :param mol: The molecule object from PySCF
-    :param mf: The mean field object from PySCF
-    :param iao1: the IAO from occupied
-    :param iao2: the IAO from virtual
-    :return: the rearranged IAOs
+    """Assign IAO to atom centers and rearrange the IAOs.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate.
+        mf (pyscf.scf.RHF): The mean field of the molecule.
+        iao1 (numpy.array): IAO for occupied space (float64).
+        iao2 (numpy.array): IAO for complementary space (float64).
+
+    Returns:
+        iao_combined (numpy.array): The rearranged IAO (float64).
     """
 
     # Calclate the integrals for assignment
@@ -190,7 +218,7 @@ def _iao_atoms(mol, iao1, iao2):
     r_int1e = mol.intor('cint1e_r_sph', 3)
     iao_combine = np.hstack((iao1, iao2))
 
-    # Calculate xyz for each orbital
+    # Calculate atom center for each orbital
     x = np.diag(reduce(np.dot,(iao_combine.T, r_int1e[0], iao_combine)))
     y = np.diag(reduce(np.dot,(iao_combine.T, r_int1e[1], iao_combine)))
     z = np.diag(reduce(np.dot,(iao_combine.T, r_int1e[2], iao_combine)))
@@ -214,13 +242,15 @@ def _iao_atoms(mol, iao1, iao2):
 
     return iao_combine
 
-
 def _dmet_atom_list(mol, orbitals):
-    """
-    Assign each orbital to an atom
-    :param mol: The molecule object from PySCF
-    :param orbitals: Coordinates for the orbitals centers
-    :return: The list for atom assignment of the IAOs
+    """Assign IAO to atom centers and rearrange the IAOs.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate.
+        orbitals (numpy.array): Coordinates for the orbital centers (float64).
+
+    Returns:
+        newlist (list): The list for atom assignment for IAO (int).
     """
 
     # Initialize the list
@@ -244,11 +274,14 @@ def _dmet_atom_list(mol, orbitals):
 
 
 def _dmet_orb_list(mol, atom_list):
-    """
-    Rearrange the orbital label
-    :param mol: The molecule object from PySCF
-    :param atom_list: The atom list of IAO assignment
-    :return: The orbital list in new order
+    """Rearrange the orbital label
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate.
+        atom_list (list): Atom list for IAO assignment (int).
+
+    Returns:
+        newlist (list): The orbital list in new order (int).
     """
     newlist = []
     for i in range(mol.natm):

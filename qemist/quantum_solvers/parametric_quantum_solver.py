@@ -27,13 +27,13 @@ class ParametricQuantumSolver(abc.ABC):
         """Performs an energy simulation for the given amplitudes.
 
         Args:
-            amplitudes (list): The ampltudes to use in the simulation.
+            amplitudes (list): The amplitudes to use in the simulation.
 
         Returns:
             float: The energy from the simulation.
 
         Raises:
-            ValueError: If len(ampltudes) doesn't equal amplitude_dimension.
+            ValueError: If len(amplitudes) doesn't equal amplitude_dimension.
         """
         pass
 
@@ -48,8 +48,7 @@ class ParametricQuantumSolver(abc.ABC):
         reduced density matrix.
 
         Returns:
-            tuple(numpy.array, numpy.array): The one- and two-element RDM
-            matrices.
+            (numpy.array, numpy.array): The one- and two-element RDMs (float64).
 
         Raises:
             RuntimeError: If no simulation has been run.

@@ -1,18 +1,26 @@
-"""
-A code for bath orbital construction for DMET calculation
+"""Bath orbital construction for DMET calculation.
+
+The construction of the bath orbitals 
+(the orbitals which include the environment effect 
+ from the surrounding part)
+is done here. 
+
 """
 
 import numpy as np
 
-
 def dmet_fragment_bath(mol, t_list, temp_list, onerdm_low):
-    """
-    Construct the bath orbitals for DMET fragment calculation
-    :param mol: The molecule object from PySCF
-    :param t_list: Number of fragment & bath orbitals
-    :param temp_list: List of the minimum and maximum number for active orbitals
-    :param onerdm_low: The one-particle RDM from the low-level calculation
-    :return: bath orbitals, and orbital energies
+    """ Construct the bath orbitals for DMET fragment calculation.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate (The full molecular system).
+        t_list (list): Number of [0] fragment & [1] bath orbitals (int).
+        temp_list (list): [0] Minimum and [1] maximum number for the active orbitals (int).
+        onerdm_low (numpy.array): One-particle RDM from the low-level calculation (float64).
+
+    Returns:
+        bath_orb (numpy.array): The bath orbitals (float64).
+        e_core (numpy.array): Orbital energies (float64).
     """
 
     # Extract the one-particle RDM for the active space
@@ -30,12 +38,15 @@ def dmet_fragment_bath(mol, t_list, temp_list, onerdm_low):
     return bath_orb, e_core
 
 def dmet_onerdm_embed(mol, temp_list, onerdm_before):
-    """
-    Extract the one particle RDM of the active space
-    :param mol: The molecule object from PySCF
-    :param temp_list: List of the minimum and maximum number for active orbitals
-    :param onerdm_before: The one-particle RDM from the low-level calculation
-    :return: The extracted one particle RDM
+    """ Extract the one particle RDM of the active space.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate (The full molecular system).
+        temp_list (list): [0] Minimum and [1] maximum number for the active orbitals (int).
+        onerdm_before (numpy.array): One-particle RDM from the low-level calculation (float64).
+
+    Returns:
+        onerdm_temp3 (numpy.array): Extracted one-particle RDM (float64).
     """
 
     # Get the number of orbitals
@@ -60,12 +71,16 @@ def dmet_onerdm_embed(mol, temp_list, onerdm_before):
     return onerdm_temp3        
 
 def dmet_bath_orb_sort(t_list, e_before, c_before):
-    """
-    Sort the bath orbitals with the eigenvalues (orbital energies)
-    :param t_list: Number of fragment & bath orbitals
-    :param e_before: The orbitals before sort
-    :param c_before: The orbitals energies before sort
-    :return: The sorted eigenvalues and eigenvectors
+    """ Sort the bath orbitals with the eigenvalues (orbital energies).
+
+    Args:
+        t_list (list): Number of [0] fragment & [1] bath orbitals (int).
+        e_before (numpy.array): Orbitals energies before sorting (float64).
+        c_before (numpy.array): Coefficients of the orbitals before sorting (float64).
+
+    Returns:
+        e_new (numpy.array): Sorted orbital energies (float64).
+        c_new (numpy.array): Coefficients of the sorted orbitals (float64).
     """
 
     # Sort the orbital energies (Occupation of 1.0 should come first...)
@@ -85,14 +100,18 @@ def dmet_bath_orb_sort(t_list, e_before, c_before):
     return e_new, c_new      
 
 def dmet_add_to_bath_orb( mol, t_list, temp_list, e_before, c_before ):
-    """
-    Add the frozen core part to the bath orbitals
-    :param mol: The molecule object from PySCF
-    :param t_list: Number of fragment & bath orbitals
-    :param temp_list: List of the minimum and maximum number for active orbitals
-    :param e_before: energy before addition of frozen core
-    :param c_before: orbitals before addition of frozen core
-    :return: the final bath orbitals and orbital energies
+    """ Add the frozen core part to the bath orbitals.
+
+    Args:
+        mol (pyscf.gto.Mole): The molecule to simulate (The full molecular system).
+        t_list (list): Number of [0] fragment & [1] bath orbitals (int).
+        temp_list (list): [0] Minimum and [1] maximum number for the active orbitals (int).
+        e_before (numpy.array): Orbital energy before addition of frozen core (float64).
+        c_before (numpy.array): Coefficients of the orbitals before addition of frozen core (float64).
+
+    Returns:
+        c_before (numpy.array): Constructed bath orbitals (float64).
+        e_occupied_core_orbitals (numpy.array): Orbital energies (float64).
     """
 
     # Copy the bath orbitals and energies be fore adding the core

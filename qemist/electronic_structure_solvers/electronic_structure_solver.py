@@ -36,8 +36,7 @@ class ElectronicStructureSolver(abc.ABC):
         the reduced density matrix.
 
         Returns:
-            tuple(numpy.array, numpy.array): The one- and two-element RDM
-            matrices.
+            (numpy.array, numpy.array): The one- and two-particle RDMs (float64).
 
         Raises:
             RuntimeError: If no simulation has been run.

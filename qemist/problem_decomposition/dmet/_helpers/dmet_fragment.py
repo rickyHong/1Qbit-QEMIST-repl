@@ -1,16 +1,27 @@
+"""Construct the orbital list for the fragments.
+
+Construct the orbital list, showing how much orbitals
+to be included for each fragment, from the atom list, 
+showing how many atoms included in each fragment.
+
 """
-Construct the orbital list for the fragments
-from the atom list
-"""
-def dmet_fragment_constructor( mol, atom_list, number_fragment ):
-    """
+
+def dmet_fragment_constructor(mol, atom_list, number_fragment):
+    """Construct orbital list.
+
     Make a list of number of orbitals for each fragment
     while obtaining the list if we consider combining
-    fragments
-    :param mol: The molecule object from PySCF
-    :param atom_list: The list describing number of atoms for each fragment
-    :param number_fragment: The number of fragment for each DMET calculation
-    :return: The lists for number of orbitals and the list defining the orbital space for each DMET calculation
+    fragments.
+
+    Args: 
+        mol (pyscf.gto.Mole): The molecule to simulate (The full molecule).
+        atom_list (list): The atom list for each fragment (int).
+        number_fragment (list): Number of element in atom list per fragment (int).
+        
+    Returns:
+        orb_list (list): The number of orbitals for each fragment (int).
+        orb_list2 (list): List of lists of the minimum and maximum orbital label for each fragment (int).
+        atom_list2 (list): The new atom list for each fragment (int).
     """
 
     # Make a new atom list based on how many fragments for DMET calculation

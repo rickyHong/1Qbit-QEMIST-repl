@@ -1,23 +1,33 @@
+"""Perform fragment SCF calculation.
+
+The fragment SCF calculation for DMET calculation
+is done here.
+
 """
-Carry out SCF calculation for DMET calculation
-"""
+
 from pyscf import gto, scf, ao2mo
 from functools import reduce
 import numpy as np
 import scipy
 
-def dmet_fragment_scf( t_list, two_ele, fock, number_electrons, number_orbitals, guess_orbitals, chemical_potential ):
+def dmet_fragment_scf(t_list, two_ele, fock, number_electrons, number_orbitals, guess_orbitals, chemical_potential):
+    """Perform SCF calculation.
+
+    Args:
+        t_list (list): Number of [0] fragment & [1] bath orbitals (int).
+        two_ele (numpy.array): Two-electron integrals for fragment calculation (float64).
+        fock (numpy.array): The fock matrix for fragment calculation (float64).
+        number_electrons (int): Number of electrons for fragment calculation.
+        number_orbitals (int): Number of orbitals for fragment calculation.
+        guess_orbitals (numpy.array): Guess orbitals for SCF calculation (float64).
+        chemical_potential (float64): The chemical potential.
+
+    Returns:
+        mf_frag (pyscf.scf.RHF): The mean field of the molecule (Fragment calculation).
+        fock_frag_copy (numpy.array): The fock matrix with chemical potential subtracted (float64).
+        mol_frag (pyscf.gto.Mole): The molecule to simulate (Fragment calculation).
     """
-    Carry out SCF calculation for the fragment
-    :param t_list: Number of fragment & bath orbitals
-    :param two_ele: Two-electron integrals for the fragment
-    :param fock: The fock matrix for the fragment
-    :param number_electrons: Number of electrons for the fragment
-    :param number_orbitals: Number of orbitals for the fragment
-    :param guess_orbitals: The guess orbitals for SCF calculation
-    :param chemical_potential: The chemical potential of the previous iteration
-    :return: mf_frag (mean field object (for fragment) of pyscf, the fock matrix subtracting the chemical potential, and mol_frag(molecule object (for fragment) of pyscf)
-    """
+
     # Deep copy the fock matrix
     fock_frag_copy = fock.copy()
 
@@ -44,28 +54,13 @@ def dmet_fragment_scf( t_list, two_ele, fock, number_electrons, number_orbitals,
     dm_frag = reduce(np.dot, (mf_frag.mo_coeff, np.diag(mf_frag.mo_occ), mf_frag.mo_coeff.T))
 
     # Use newton-raphson algorithm if the above SCF calculation is not converged
-    # print("SCF Converged ? = ", mf_frag.converged)
-    if ( mf_frag.converged == False ):
+    if (mf_frag.converged == False):
         mf_frag.get_hcore = lambda *args: fock_frag_copy
         mf_frag.get_ovlp = lambda *args: np.eye(number_orbitals)
         mf_frag._eri = ao2mo.restore(8, two_ele, number_orbitals)
         mf_frag = scf.RHF(mol_frag).newton()
         energy = mf_frag.kernel(dm0 = dm_frag)
         dm_frag = reduce(np.dot, (mf_frag.mo_coeff, np.diag(mf_frag.mo_occ), mf_frag.mo_coeff.T))
-    
-    # print("SCF Energy = ", mf_frag.e_tot)
-
-    # Calculate the density matrix
-    number_occupied = int(number_electrons/2)
-    fock_fragment = fock_frag_copy + np.einsum('ijkl,ij->kl', two_ele, dm_frag ) - 0.5 * np.einsum('ijkl,ik->jl', two_ele, dm_frag )
-    eigenvalues, eigenvectors = scipy.linalg.eigh(fock_fragment)
-    inew_index = eigenvalues.argsort()
-    eigenvalues = eigenvalues[inew_index]
-    eigenvectors = eigenvectors[ :, inew_index]
-    dm_frag2 = np.dot(eigenvectors[:, :number_occupied], eigenvectors[:, :number_occupied].T) * 2
-
-    # Check the difference between the RDMs obtained in two ways
-    # print(" Density difference = ", scipy.linalg.norm(dm_frag - dm_frag2))
     
     return mf_frag, fock_frag_copy, mol_frag
 

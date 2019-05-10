@@ -1,3 +1,18 @@
+"""Perform DMET calculation.
+
+The density matrix embedding theory (DMET) calculation using the
+single-shot algorithm is done here.
+
+CCSD, FCI, and quantum solvers can be used as impurity solvers.
+IAO and Meta-Lowdin localization schemes can be used.
+
+For details, refer to:
+G. Knizia et al. PRL 109, 186404 (2012)
+G. Knizia et al. JCTC 9, 1428-1434 (2013)
+S. Wouters et al. JCTC 12, 2706-2719 (2016)
+
+"""
+
 import warnings
 
 import scipy
@@ -12,6 +27,20 @@ from ..electron_localization import iao_localization
 from . import _helpers as helpers
 
 class DMETProblemDecomposition(ProblemDecomposition):
+    """Employ DMET as a problem decomposition technique.
+
+    DMET single-shot algorithm is used for problem decomposition technique.
+    By default, CCSD is used as the electronic structure solver, and
+    IAO is used for the localization scheme.
+    Users can define other electronic structure solver such as FCI or
+    VQE as an impurity solver. Meta-Lowdin localization scheme can be
+    used instead of the IAO scheme, which cannot be used for minimal
+    basis set.
+
+    Attributes:
+        electronic_structure_solver (subclass of ElectronicStructureSolver): A type of electronic structure solver. Default is CCSD.
+        electron_localization_method (string): A type of localization scheme. Default is IAO.
+    """
 
     def __init__(self):
         self.verbose = True
@@ -19,6 +48,26 @@ class DMETProblemDecomposition(ProblemDecomposition):
         self.electron_localization_method = iao_localization
 
     def simulate(self, molecule, fragment_atoms, mean_field = None):
+        """Perform DMET single-shot calculation.
+
+        If the mean field is not provided it is automatically calculated.
+
+        Args:
+            molecule (pyscf.gto.Mole): The molecule to simulate.
+            fragment_atoms (list): List of number of atoms for each fragment (int).
+            mean_field (pyscf.scf.RHF): The mean field of the molecule.
+
+        Return:
+            float64: The DMET energy (dmet_energy).
+
+        Raise:
+            RuntimeError: If the number of atoms in the fragment list doesn't
+                agree with total.
+        """
+
+        # Check if the number of fragment sites is equal to the number of atoms in the molecule
+        if molecule.natm != sum(fragment_atoms):
+            raise RuntimeError("the number of fragment sites is not equal to the number of atoms in the molecule")
 
         # Calculate the mean field if the user has not already done it.
         if not mean_field:
@@ -34,7 +83,7 @@ class DMETProblemDecomposition(ProblemDecomposition):
         orbitals = helpers._orbitals(molecule, mean_field,
                 range(molecule.nao_nr()), self.electron_localization_method)
 
-        # TODO: remove last argument, combiging fragments not supported
+        # TODO: remove last argument, combining fragments not supported
         orb_list, orb_list2, atom_list2 = helpers._fragment_constructor(molecule,
                 fragment_atoms, 0)
 
@@ -54,8 +103,25 @@ class DMETProblemDecomposition(ProblemDecomposition):
 
         return dmet_energy
 
-
     def _oneshot_loop(self, chemical_potential, orbitals, orb_list, orb_list2, energy_list):
+        """Perform the DMET loop.
+
+        This is the function which runs in the minimizer.
+        DMET calculation converges when the chemical potential is below the
+        threshold value of the Newton-Rhapson optimizer.
+
+        Args:
+            chemical_potential (float64): The Chemical potential.
+            orbitals (numpy.array): The localized orbitals (float64).
+            orb_list (list): The number of orbitals for each fragment (int).
+            orb_list2 (list): List of lists of the minimum and maximum orbital label for each fragment (int).
+            energy_list (list): List of DMET energy for each iteration (float64).
+
+        Returns:
+            float64: The new chemical potential.
+        """
+
+        # Calculate the 1-RDM for the entire molecule
         onerdm_low = helpers._low_rdm(orbitals.active_fock, orbitals.number_active_electrons)
 
         niter = len(energy_list)+1
@@ -92,10 +158,12 @@ class DMETProblemDecomposition(ProblemDecomposition):
             # Carry out SCF calculation for a fragment
             mf_fragment, fock_frag_copy, mol_frag = helpers._fragment_scf(t_list, two_ele, fock, nelec_high, norb_high, guess_orbitals, chemical_potential)
 
+            # Solve the electronic structure
             energy = self.electronic_structure_solver.simulate(mol_frag, mf_fragment)
+            # Calculate the RDMs
             cc_onerdm, cc_twordm = self.electronic_structure_solver.get_rdm()
 
-            # Compute the fargment energy
+            # Compute the fragment energy
             fragment_energy, total_energy_rdm, one_rdm = self._compute_energy(mf_fragment, cc_onerdm, cc_twordm, fock_frag_copy, t_list, one_ele, two_ele, fock)
 
             # Sum up the energy
@@ -116,18 +184,24 @@ class DMETProblemDecomposition(ProblemDecomposition):
         return number_of_electron - orbitals.number_active_electrons
 
     def _compute_energy(self, mf_frag, onerdm, twordm, fock_frag_copy, t_list, oneint, twoint, fock):
+        """Calculate the fragment energy.
+
+        Args:
+            mean_field (pyscf.scf.RHF): The mean field of the fragment.
+            cc_onerdm (numpy.array): one-particle reduced density matrix (float64).
+            cc_twordm (numpy.array): two-particle reduced density matrix (float64).
+            fock_frag_copy (numpy.array): Fock matrix with the chemical potential subtracted (float64).
+            t_list (list): List of number of fragment and bath orbitals (int).
+            oneint (numpy.array): One-electron integrals of fragment (float64).
+            twoint (numpy.array): Two-electron integrals of fragment (float64).
+            fock (numpy.array): Fock matrix of fragment (float64).
+
+        Returns:
+            float64: Fragment energy (fragment_energy).
+            float64: Total energy for fragment using RDMs (total_energy_rdm).
+            numpy.array: One-particle RDM for a fragment (one_rdm, float64).
         """
-        Calculate fragment energy
-        :param mf_frag: mean field object (for fragment) of pyscf
-        :param cc_onerdm: one-particle reduced density matrix
-        :param cc_twordm: two-particle reduced density matrix
-        :param fock_frag_copy: Fock matrix with the chemical potential subtracted
-        :param t_list: Number of fragment & bath orbitals
-        :param oneint: One-electron integrals for the fragment
-        :param twoint: Two-electron integrals for the fragment
-        :param fock: The fock matrix for the fragment
-        :return: Fragment energy and reduced density matrix from CCSD calculation
-        """
+
         # Execute CCSD calculation
         norb = t_list[0]
 
@@ -151,7 +225,7 @@ class DMETProblemDecomposition(ProblemDecomposition):
                                + 0.125 * np.einsum('ijkl,ijkl->', twordm[ :     , :     , : norb, :      ], twoint[ :     , :     , : norb, :     ]) \
                                + 0.125 * np.einsum('ijkl,ijkl->', twordm[ :     , :     , :     , : norb ], twoint[ :     , :     , :     , : norb])
 
-
         fragment_energy = fragment_energy_one_rdm + fragment_energy_twordm
+
         return fragment_energy, total_energy_rdm, one_rdm
 

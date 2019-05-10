@@ -1,3 +1,14 @@
+"""Perform quantum simulation based on VQE algorithm.
+
+The electronic structure calculation employing the 
+quantum/classical hybrid variational quantum eigensolver 
+(VQE) algorithm is done here.
+The quantum eigensolver runs inside the classical optimizer.
+
+There are options for which hardware backend can be used. 
+
+"""
+
 import warnings
 import itertools
 
@@ -88,8 +99,7 @@ class VQESolver(ElectronicStructureSolver):
         state to return the RDM.
 
         Returns:
-            tuple(numpy.array, numpy.array): The one- and two-element RDM
-            matrices.
+            (numpy.array,numpy.array): One & two-particle RDMs (float64).
 
         Raises:
             RuntimeError: If no simulation has been run.
@@ -104,7 +114,15 @@ class VQESolver(ElectronicStructureSolver):
 
         Funciton that is used by the class as a default optimizer when user does
         not provide one.
+
+        Args:
+            backend (ParametricSolver): The quantum solver.
+            amplitudes (list): The variational parameters (float64).
+
+        Returns:
+            list: The new variational parameters (result.fun, float64).
         """
+
         from scipy.optimize import minimize
         result = minimize(backend, amplitudes, method='SLSQP',
                 options={'disp':False, 'maxiter': 15000})
