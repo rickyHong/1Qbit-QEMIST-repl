@@ -1,5 +1,5 @@
 #   Copyright 2019 1QBit
-#   
+#
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
 #   You may obtain a copy of the License at
@@ -14,12 +14,18 @@
 
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("README.md", "r") as readme:
+    long_description = readme.read() # heh
+
+# This requires the first line of the module init to be something like:
+# __version__ = "0.0.1"
+with open("openqemist/__init__.py", "r") as init:
+    first_line = init.readline()
+    package_version = first_line.split("\"")[1]
 
 setuptools.setup(
     name="openqemist",
-    version="0.0.1",
+    version=package_version,
     author="Rudi Plesch",
     author_email="rudi.plesch@1qbit.com",
     description="Quantum chemistry simulation library.",
@@ -27,9 +33,10 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/1QB-Information-Technologies/openqemist",
     packages=setuptools.find_packages(),
-    install_requires=['pyscf==1.6', 'numpy', 'scipy'],
+    install_requires=['pyscf==1.6', 'numpy', 'scipy', 'qsharp'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
+        "License :: OSI Approved :: Apache Software License"
     ],
 )
