@@ -33,7 +33,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'QEMIST'
+project = 'OpenQEMIST'
 copyright = '1QBit'
 author = 'Rudi Plesch, Valentin Senicourt, Yukio Kawashima, Lee Huntington, Prakash Verma, Takeshi Yamazaki, Arman Zaribafiyan'
 
@@ -82,7 +82,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'setup.py', 'qemist/tests']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'setup.py', 'openqemist/tests']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
@@ -162,7 +162,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'qemist', 'QEMIST Documentation',
+    (master_doc, 'openqemist', 'OpenQEMIST Documentation',
      [author], 1)
 ]
 
@@ -173,8 +173,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'QEMIST', 'QEMIST Documentation',
-     author, 'QEMIST', 'One line description of project.',
+    (master_doc, 'OpenQEMIST', 'OpenQEMIST Documentation',
+     author, 'OpenQEMIST', 'One line description of project.',
      'Miscellaneous'),
 ]
 

@@ -17,8 +17,8 @@ from enum import Enum
 
 from pyscf import gto, scf
 
-from qemist.electronic_structure_solvers import VQESolver
-from qemist.quantum_solvers.parametric_quantum_solver import ParametricQuantumSolver
+from openqemist.electronic_structure_solvers import VQESolver
+from openqemist.quantum_solvers.parametric_quantum_solver import ParametricQuantumSolver
 
 H2 = """
    H 0.00 0.00 0.0

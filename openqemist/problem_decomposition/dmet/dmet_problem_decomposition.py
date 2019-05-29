@@ -34,7 +34,7 @@ from pyscf import scf
 from functools import reduce
 import numpy as np
 
-from qemist.electronic_structure_solvers import CCSDSolver
+from openqemist.electronic_structure_solvers import CCSDSolver
 from ..problem_decomposition import ProblemDecomposition
 from ..electron_localization import iao_localization
 

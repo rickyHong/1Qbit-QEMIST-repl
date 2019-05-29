@@ -1,5 +1,5 @@
-Welcome to QEMIST's documentation!
-==================================
+Welcome to OpenQEMIST's documentation!
+=======================================
 
 .. toctree::
    :maxdepth: 4

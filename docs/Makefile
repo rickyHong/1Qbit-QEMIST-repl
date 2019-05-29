@@ -16,7 +16,7 @@ help:
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	@sphinx-apidoc  -o refman/ .. ../setup.py ../qemist/tests/ ../benchmarks
+	@sphinx-apidoc  -o refman/ .. ../setup.py ../openqemist/tests/ ../benchmarks
 	@jupyter nbconvert --execute --to rst ../examples/end_to_end.ipynb
 	@mv ../examples/end_to_end.rst .
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

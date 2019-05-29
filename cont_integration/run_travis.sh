@@ -19,6 +19,6 @@
 
 docker build $TRAVIS_BUILD_DIR/docker_images/ --tag qemist_test_image
 
-docker run -idt --rm -v $TRAVIS_BUILD_DIR:/root/QEMIST --env OMP_THREAD_LIMIT=4 --name qemist_test_container qemist_test_image bash
+docker run -idt --rm -v $TRAVIS_BUILD_DIR:/root/openqemist --env OMP_THREAD_LIMIT=4 --name qemist_test_container qemist_test_image bash
 
-docker exec -it qemist_test_container bash -c "cd /root/QEMIST/qemist/tests; python3 -m unittest discover"
+docker exec -it qemist_test_container bash -c "cd /root/openqemist/openqemist/tests; python3 -m unittest discover"

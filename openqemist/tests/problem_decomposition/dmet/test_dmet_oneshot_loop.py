@@ -20,18 +20,18 @@ import unittest
 from pyscf import gto, scf
 import numpy as np
 
-from qemist.problem_decomposition.dmet._helpers.dmet_orbitals import dmet_orbitals
-from qemist.problem_decomposition.dmet._helpers.dmet_onerdm import dmet_low_rdm, dmet_fragment_rdm
-from qemist.problem_decomposition.dmet._helpers.dmet_onerdm import dmet_low_rdm, dmet_fragment_rdm
-from qemist.problem_decomposition.dmet._helpers.dmet_bath import dmet_fragment_bath
-from qemist.problem_decomposition.dmet._helpers.dmet_scf_guess import dmet_fragment_guess
-from qemist.problem_decomposition.dmet._helpers.dmet_scf import dmet_fragment_scf
-from qemist.problem_decomposition.electron_localization import iao_localization
+from openqemist.problem_decomposition.dmet._helpers.dmet_orbitals import dmet_orbitals
+from openqemist.problem_decomposition.dmet._helpers.dmet_onerdm import dmet_low_rdm, dmet_fragment_rdm
+from openqemist.problem_decomposition.dmet._helpers.dmet_onerdm import dmet_low_rdm, dmet_fragment_rdm
+from openqemist.problem_decomposition.dmet._helpers.dmet_bath import dmet_fragment_bath
+from openqemist.problem_decomposition.dmet._helpers.dmet_scf_guess import dmet_fragment_guess
+from openqemist.problem_decomposition.dmet._helpers.dmet_scf import dmet_fragment_scf
+from openqemist.problem_decomposition.electron_localization import iao_localization
 
 def get_file_path_stub():
     """ Gets the path of the test files from anywhere in the test tree."
 
-    The direcory structure should be $SOMETHING/QEMIST/qemist/tests/$SOMETHINGELSE
+    The direcory structure should be $SOMETHING/openqemist/openqemist/tests/$SOMETHINGELSE
     so we trim after "tests", then add the path to the results files so we can
     run the tests from anywhere in the tree."""
     import os

@@ -17,15 +17,15 @@ Test the construction of localized orbitals for DMET calculation
 """
 
 import unittest
-from qemist.problem_decomposition.dmet._helpers.dmet_orbitals import dmet_orbitals
-from qemist.problem_decomposition.electron_localization import iao_localization
+from openqemist.problem_decomposition.dmet._helpers.dmet_orbitals import dmet_orbitals
+from openqemist.problem_decomposition.electron_localization import iao_localization
 from pyscf import gto, scf
 import numpy as np
 
 def get_file_path_stub():
     """ Gets the path of the test files from anywhere in the test tree."
 
-    The direcory structure should be $SOMETHING/QEMIST/qemist/tests/$SOMETHINGELSE
+    The direcory structure should be $SOMETHING/openqemist/openqemist/tests/$SOMETHINGELSE
     so we trim after "tests", then add the path to the results files so we can
     run the tests from anywhere in the tree."""
     import os

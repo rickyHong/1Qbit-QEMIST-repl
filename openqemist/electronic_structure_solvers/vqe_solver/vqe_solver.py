@@ -14,12 +14,12 @@
 
 """Perform quantum simulation based on VQE algorithm.
 
-The electronic structure calculation employing the 
-quantum/classical hybrid variational quantum eigensolver 
+The electronic structure calculation employing the
+quantum/classical hybrid variational quantum eigensolver
 (VQE) algorithm is done here.
 The quantum eigensolver runs inside the classical optimizer.
 
-There are options for which hardware backend can be used. 
+There are options for which hardware backend can be used.
 
 """
 
@@ -29,7 +29,7 @@ import itertools
 import numpy as np
 from pyscf import scf
 
-from qemist.quantum_solvers.initial_parameters import mp2_intitial_amplitudes
+from openqemist.quantum_solvers.initial_parameters import mp2_intitial_amplitudes
 
 from ..electronic_structure_solver import ElectronicStructureSolver
 
@@ -42,8 +42,8 @@ class VQESolver(ElectronicStructureSolver):
     is the amplitudes to optimize over and returns a energy. See the
     implementation of `_default_optimizer` for a concrete example.
     Users should provide a hardware backend type that conforms to the interface
-    of `qemist.quantum_solver.ParametricQuantumSolver` that the `VQESolver` will
-    construct and use. Users should also provide an ansatze type that is
+    of `openqemist.quantum_solver.ParametricQuantumSolver` that the `VQESolver`
+    will construct and use. Users should also provide an ansatze type that is
     supported by the backend.
     Users can also provide a function that takes a `pyscf.gto.Mole` as its first
     argument and `pyscf.scf.RHF` as is second and returns the inital amplitudes

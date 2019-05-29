@@ -18,7 +18,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="qemist",
+    name="openqemist",
     version="0.0.1",
     author="Rudi Plesch",
     author_email="rudi.plesch@1qbit.com",

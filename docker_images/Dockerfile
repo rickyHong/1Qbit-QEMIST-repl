@@ -45,6 +45,6 @@ RUN pip3 install qsharp
 RUN /root/.dotnet/tools/dotnet-iqsharp install
 
 # Set the python path to find qemist
-ENV PYTHONPATH=$PYTHONPATH:/root/QEMIST
+ENV PYTHONPATH=$PYTHONPATH:/root/openqemist
 
 WORKDIR /root/

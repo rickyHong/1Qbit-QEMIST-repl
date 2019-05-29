@@ -16,9 +16,9 @@ import unittest
 
 from pyscf import gto
 
-from qemist.electronic_structure_solvers import FCISolver, CCSDSolver
-from qemist.problem_decomposition import DMETProblemDecomposition
-from qemist.problem_decomposition.electron_localization import iao_localization, meta_lowdin_localization
+from openqemist.electronic_structure_solvers import FCISolver, CCSDSolver
+from openqemist.problem_decomposition import DMETProblemDecomposition
+from openqemist.problem_decomposition.electron_localization import iao_localization, meta_lowdin_localization
 
 H10_RING = """
         H      0.970820393250   0.000000000000   0.000000000000

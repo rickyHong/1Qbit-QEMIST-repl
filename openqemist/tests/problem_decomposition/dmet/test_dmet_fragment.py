@@ -19,7 +19,7 @@ Test the construction of orbital list (from atom list) for DMET calculation
 import unittest
 from pyscf import gto
 
-from qemist.problem_decomposition.dmet._helpers.dmet_fragment import dmet_fragment_constructor
+from openqemist.problem_decomposition.dmet._helpers.dmet_fragment import dmet_fragment_constructor
 
 class TestFragments(unittest.TestCase):
     """ Generate the orbital list """

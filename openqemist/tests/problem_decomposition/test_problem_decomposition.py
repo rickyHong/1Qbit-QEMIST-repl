@@ -14,7 +14,7 @@
 
 import unittest
 
-from qemist.problem_decomposition.problem_decomposition import ProblemDecomposition
+from openqemist.problem_decomposition.problem_decomposition import ProblemDecomposition
 
 class MockProblemDecomposition(ProblemDecomposition):
 
