@@ -21,12 +21,14 @@ full functionality of QEMIST and obtaining additional information, please
 consult our main [product page](https://1qbit.com/qemist).
 
 ## Installation
-To install the package with pip:
+### Installation with pip
+The simplest way to install the package is to use pip.
 
-1. Follow the setup [instructions](https://docs.microsoft.com/en-us/quantum/install-guide/?view=qsharp-preview) for installing the .NET Core SDK and the Microsoft IQ# module.
+`pip install openqemist`
 
-2. Install OpenQEMIST with `pip install openqemist`.
+Before unsing the Microsoft Q# integration, follow the setup [instructions](https://docs.microsoft.com/en-us/quantum/install-guide/?view=qsharp-preview) for installing the .NET Core SDK and the Microsoft IQ# module.
 
+### Installation from source
 To install OpenQEMIST from source, simply clone the GitHub repo and add the package
 to your ``PYTHONPATH``. The dependencies for running the project are the Microsoft
 .NET Core SDK, IQ#, and qsharp packages; pyscf; numpy; and scipy. The most current

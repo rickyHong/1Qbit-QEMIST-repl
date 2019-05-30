@@ -5,9 +5,10 @@ Pip
 ___
 The simplest way to install OpenQEMIST is with pip.
 
-1. Follow the setup instructions_ for installing the .NET Core SDK and the Microsoft IQ# module.
+``pip install openqemist``
 
-2. Install OpenQEMIST with ``pip install openqemist``.
+Before using the Microsoft Q# integration, follow the setup instructions_ for
+installing the .NET Core SDK and the Microsoft IQ# module.
 
 .. _instructions: https://docs.microsoft.com/en-us/quantum/install-guide/?view=qsharp-preview
 
