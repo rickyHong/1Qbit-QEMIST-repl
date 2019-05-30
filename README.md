@@ -7,14 +7,18 @@ state-of-the-art classical techniques, the Quantum-Enabled Molecular ab Initio
 Simulation Toolkit, or QEMIST, is 1QBit’s innovative solution to a fundamental
 and intractable problem in chemistry: ab initio simulation of molecules.
 
-The accurate prediction of the electronic structure of a molecule is key to the
-design of new materials, such as drug compounds and catalyst molecules, by
-helping to anticipate a material’s properties before its synthesis in the lab.
-However, obtaining this information using classical computers is computationally
-intensive, and the resources required for an exact solution scale exponentially
-with the size of the problem. Attempts to provide approximate approaches to this
-problem on classical computers have been to date either limited to small-sized
-systems or compromising on the accuracy of the simulation.
+QEMIST is designed to enable the accurate calculation of molecular properties by
+leveraging advanced problem decomposition (PD) techniques and quantum computing.
+The variety of PD techniques implemented in QEMIST enables massively parallel
+simulations by breaking down a computational chemistry task into smaller,
+independent subproblems. These subproblems can use a combination of interfaces
+to various classical and quantum solvers to achieve a higher level of accuracy
+for large-scale, practical molecular simulations.
+
+OpenQEMIST provides access to a portion of the functionalities of QEMIST, as
+open source software under an Apache 2.0 license. For more information about the
+full functionality of QEMIST and obtaining additional information, please
+consult our main [product page](https://1qbit.com/qemist).
 
 ## Installation
 To install the package with pip:
