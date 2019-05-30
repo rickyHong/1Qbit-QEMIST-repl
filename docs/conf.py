@@ -1,5 +1,5 @@
 #   Copyright 2019 1QBit
-#   
+#
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
 #   You may obtain a copy of the License at
@@ -34,7 +34,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'OpenQEMIST'
-copyright = '1QBit'
+copyright = '1QBit 2019'
 author = 'Rudi Plesch, Valentin Senicourt, Yukio Kawashima, Lee Huntington, Prakash Verma, Takeshi Yamazaki, Arman Zaribafiyan'
 
 # The short X.Y version

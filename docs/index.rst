@@ -107,6 +107,18 @@ solvers in QEMIST.
 
 .. _blog: https://cloudblogs.microsoft.com/quantum/2019/05/06/new-plans-to-open-source-more-of-the-quantum-development-kit/
 
+Contributing to OpenQEMIST
+==========================
+We welcome contributions to OpenQEMIST! Please open an issue or submit a pull request on GitHub to start the process.
+
+Citing OpenQEMIST
+=================
+If you use OpenQEMIST in your research, please cite
+
+Takeshi Yamazaki, Shunji Matsuura, Ali Narimani, Anushervon Saidmuradov, and Arman Zaribafiyan "Towards the Practical Application of Near-Term Quantum Computers in Quantum Chemistry Simulations: A Problem Decomposition Approach" Published on arXiv_ on Jun 4, 2018.
+
+.. _arXiv: https://arxiv.org/abs/1806.01305
+
 Indices and tables
 ==================
 
