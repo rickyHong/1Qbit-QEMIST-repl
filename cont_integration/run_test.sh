@@ -14,11 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This is the script that runs on Travis. It simply build the Docker image, runs
-# a container, and runs the unit tests inside the container.
-
-docker build $TRAVIS_BUILD_DIR/docker_images/ --tag qemist_test_image
-
-docker run -idt --rm -v $TRAVIS_BUILD_DIR:/root/openqemist --env OMP_THREAD_LIMIT=4 --name qemist_test_container qemist_test_image bash
-
-docker exec -it qemist_test_container bash /root/openqemist/cont_integration/run_test.sh
+PATH=$PATH:/root/.dotnet/tools
+cd /root/openqemist/openqemist/tests
+python3 -m unittest discover
