@@ -58,26 +58,25 @@ class DMETProblemDecompositionTest(unittest.TestCase):
         solver.electronic_structure_solver = FCISolver()
         energy = solver.simulate(mol, [1,1,1,1,1,1,1,1,1,1])
 
-        self.assertAlmostEqual(energy, -4.498973024, places=6)
+        self.assertAlmostEqual(energy, -4.498973024, places=4)
 
-#TODO: Fix sporadic test failures.
-#    def test_h4ring_iao_ccsd_no_mf_321g(self):
-#        """ Tests the result from DMET against a value from a reference
-#        implementation with IAO localization, 3-21g basis, and CCSD solution to
-#        fragments."""
-#        mol = gto.Mole()
-#        mol.atom = H4_RING
-#        mol.basis = "3-21g"
-#        mol.charge = 0
-#        mol.spin = 0
-#        mol.build()
-#
-#        solver = DMETProblemDecomposition()
-#        solver.electron_localization_method = iao_localization
-#        solver.electronic_structure_solver = CCSDSolver()
-#        energy = solver.simulate(mol, [2,2])
-#
-#        self.assertAlmostEqual(energy, -2.0290205366, places=6)
+    def test_h4ring_iao_ccsd_no_mf_321g(self):
+        """ Tests the result from DMET against a value from a reference
+        implementation with IAO localization, 3-21g basis, and CCSD solution to
+        fragments."""
+        mol = gto.Mole()
+        mol.atom = H4_RING
+        mol.basis = "3-21g"
+        mol.charge = 0
+        mol.spin = 0
+        mol.build()
+
+        solver = DMETProblemDecomposition()
+        solver.electron_localization_method = iao_localization
+        solver.electronic_structure_solver = CCSDSolver()
+        energy = solver.simulate(mol, [2,2])
+
+        self.assertAlmostEqual(energy, -2.0290205366, places=6)
 
     def test_h4ring_ml_ccsd_no_mf_minao(self):
         """ Tests the result from DMET against a value from a reference
@@ -113,7 +112,7 @@ class DMETProblemDecompositionTest(unittest.TestCase):
         solver.electronic_structure_solver = FCISolver()
         energy = solver.simulate(mol, [1,1,1,1])
 
-        self.assertAlmostEqual(energy, -1.9916120594, places=6)
+        self.assertAlmostEqual(energy, -1.9916120594, places=4)
 
 if __name__ == "__main__":
     unittest.main()
