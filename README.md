@@ -26,7 +26,9 @@ The simplest way to install the package is to use pip.
 
 `pip install openqemist`
 
-Before unsing the Microsoft Q# integration, follow the setup [instructions](https://docs.microsoft.com/en-us/quantum/install-guide/?view=qsharp-preview) for installing the .NET Core SDK and the Microsoft IQ# module.
+Before using the Microsoft Q# integration, follow the setup
+[instructions](https://docs.microsoft.com/en-us/quantum/install-guide/?view=qsharp-preview)
+for installing the .NET Core SDK and the Microsoft IQ# module.
 
 ### Installation from source
 To install OpenQEMIST from source, simply clone the GitHub repo and add the package
@@ -37,7 +39,8 @@ be found in the [Dockerfile](./docker_images/Dockerfile).
 
 ## Getting started
 
-To get started install the package, then see the [Jupyter notebooks](./examples/) for example usage.
+To get started install the package, then see the [Jupyter notebooks](./examples/)
+for example usage.
 
 ## Contents of the repository
 
@@ -55,7 +58,7 @@ Examples and tutorials to learn how to use the different functionalities of the 
 - **openqemist** :
 The python package.
 
-## Architechture of OpenQEMIST
+## Architecture of OpenQEMIST
 
 OpenQEMIST is organized into three layers: problem decomposition, electronic
 structure solvers, and hardware backends. The problem decomposition layer is
@@ -63,8 +66,9 @@ responsible for splitting the input molecule into smaller subproblems and
 submitting these to one (but conceivably more than one) eigenvalue solver, then
 processing these results into an output energy. Some electronic structure
 solvers use classical methods, while other use wrappers over quantum hardware
-emulators from various hardware providers. The quantum solver backend layer
-implements a common interface over libraries and emulators of quantum hardware.
+emulators and simulators from various hardware providers. The quantum solver
+backend layer implements a common interface over libraries and emulators and
+simulators of quantum hardware.
 
 Currently DMET is the only implemented problem decomposition.
 VQE, FCI, and CCSD are the implemented electronic structure solvers.
