@@ -15,9 +15,9 @@ independent subproblems. These subproblems can use a combination of interfaces
 to various classical and quantum solvers to achieve a higher level of accuracy
 for large-scale, practical molecular simulations.
 
-OpenQEMIST provides access to a portion of the functionalities of QEMIST, as
+OpenQEMIST provides access to a portion of the functionalities of QEMIST as
 open source software under an Apache 2.0 license. For more information about the
-full functionality of QEMIST and obtaining additional information, please
+full functionality of QEMIST and to obtain additional information, please
 consult our main [product page](https://1qbit.com/qemist).
 
 ## Installation
@@ -39,15 +39,15 @@ can be found in the [Dockerfile](./docker_images/Dockerfile).
 
 ## Getting started
 
-To get started install the package, then see the [Jupyter notebooks](./examples/)
+To get started, install the package, then see the [Jupyter notebooks](./examples/)
 for example usage.
 
 ## Contents of the repository
 
-Details the organization of this repository and the contents of each folder
+Details the organization of this repository and the contents of each folder.
 
 - **cont_integration** :
-Tools and script for continuous integration (versioning, automated testing and updating documentation)
+Tools and script for continuous integration (versioning, automated testing, and updating documentation)
 
 - **documentation** :
 Source code documentation and user documentation
@@ -56,7 +56,7 @@ Source code documentation and user documentation
 Examples and tutorials to learn how to use the different functionalities of the library
 
 - **openqemist** :
-The python package.
+The Python package
 
 ## Architechture of OpenQEMIST
 OpenQEMIST is organized into three layers: problem decomposition, electronic
@@ -66,17 +66,17 @@ treating these using one particular eigenvalue solver (conceivably, fragments
 could be treated using multiple solvers), then processing these results into an
 overall output energy. Some electronic structure solvers use classical methods,
 while others use wrappers over quantum algorithms running on quantum computing
-emulators and simulators from quantum platofrm providers. The quantum solver
-backend layer implements a common interface over libraries, emulators and
+emulators and simulators from quantum platform providers. The quantum solver
+backend layer implements a common interface over libraries, emulators, and
 simulators of quantum hardware.
 
-As OpenQEMIST includes a portion of functionalities incorporated in QEMIST, DMET
+As OpenQEMIST includes only a portion of the functionalities incorporated in QEMIST, DMET
 is the only problem decomposition technique open sourced in our initial release.
 This release includes the Full CI and coupled-cluster with single and double
 excitations (CCSD) electronic structure solvers, as well as a quantum electronic
-structure solver based on the Variational Quantum Eigensolver  (VQE) algorithm.
+structure solver based on the Variational Quantum Eigensolver (VQE) algorithm.
 
-On the hardware backend, this initial release is integrated with Microsoft
+On the hardware backend, this initial release is integrated with the Microsoft
 Quantum Development Kit for running the VQE algorithm.
 
 ## Contributing
