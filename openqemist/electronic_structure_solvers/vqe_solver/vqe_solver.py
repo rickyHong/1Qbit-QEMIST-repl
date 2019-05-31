@@ -1,17 +1,3 @@
-#   Copyright 2019 1QBit
-#   
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-
 """Perform quantum simulation based on VQE algorithm.
 
 The electronic structure calculation employing the
@@ -29,7 +15,7 @@ import itertools
 import numpy as np
 from pyscf import scf
 
-from openqemist.quantum_solvers.initial_parameters import mp2_intitial_amplitudes
+from openqemist.quantum_solvers.initial_parameters import mp2_initial_amplitudes
 
 from ..electronic_structure_solver import ElectronicStructureSolver
 
@@ -59,7 +45,13 @@ class VQESolver(ElectronicStructureSolver):
         optimizer (function): Function that is called to optimize.
         initial_amplitude_function (function): Function that returns the initial
             amplitudes used for the optimization.
+        initial_amplitudes (list): The initial amplitudes for the optimzation.
         verbose (boolean): Controls the verbosity of the default optimizer.
+    Note:
+        Initial amplitudes can be specified both through the functional
+        parameter `initial_amplitude_function` and through the
+        `initial_amplitudes`. If both are specified the `initial_amplitudes` are
+        used.
     """
 
     def __init__(self):
@@ -68,7 +60,8 @@ class VQESolver(ElectronicStructureSolver):
         self.hardware_backend = None
         self.ansatz_type = None
         self.optimizer = None
-        self.inital_amplitude_function = mp2_intitial_amplitudes
+        self.initial_amplitude_function = mp2_initial_amplitudes
+        self.initial_amplitudes = None
 
     def simulate(self, molecule, mean_field=None):
         """Perform the simulation for the molecule.
@@ -94,7 +87,13 @@ class VQESolver(ElectronicStructureSolver):
         self.hardware_backend = self.hardware_backend_type(self.ansatz_type,
                 molecule, mean_field)
 
-        amplitudes = self.inital_amplitude_function(molecule, mean_field)
+        # If no set of initial amplitudes was provided, set them as MP2 amplitudes
+        if self.initial_amplitudes:
+            amplitudes = self.initial_amplitudes
+        else:
+            amplitudes = self.initial_amplitude_function(molecule, mean_field)
+        if self.verbose:
+            print("VQE : initial amplitudes\n", amplitudes, "\n\n")
 
         # If the user didn't provide an optimizer, then we give them scipy's
         if not self.optimizer:
@@ -138,13 +137,13 @@ class VQESolver(ElectronicStructureSolver):
         """
 
         from scipy.optimize import minimize
-        result = minimize(backend, amplitudes, method='SLSQP',
-                options={'disp':False, 'maxiter': 15000})
+
+        result = minimize(backend, amplitudes, method='COBYLA',
+                options={'disp':True, 'maxiter':2000, 'rhobeg':0.01, 'tol':1e-5})
 
         if self.verbose:
             print("\n\t\tOptimal UCCSD Singlet Energy: {}".format(result.fun))
             print("\t\tOptimal UCCSD Singlet Amplitudes: {}".format(result.x))
-            print("\t\tNumber of Iterations : ", result.nit)
             print("\t\tNumber of Function Evaluations : ", result.nfev)
 
         return result.fun

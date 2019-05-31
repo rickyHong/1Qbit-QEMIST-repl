@@ -12,21 +12,6 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-"""Perform DMET calculation.
-
-The density matrix embedding theory (DMET) calculation using the
-single-shot algorithm is done here.
-
-CCSD, FCI, and quantum solvers can be used as impurity solvers.
-IAO and Meta-Lowdin localization schemes can be used.
-
-For details, refer to:
-G. Knizia et al. PRL 109, 186404 (2012)
-G. Knizia et al. JCTC 9, 1428-1434 (2013)
-S. Wouters et al. JCTC 12, 2706-2719 (2016)
-
-"""
-
 import warnings
 
 import scipy
@@ -57,7 +42,7 @@ class DMETProblemDecomposition(ProblemDecomposition):
     """
 
     def __init__(self):
-        self.verbose = True
+        self.verbose = False
         self.electronic_structure_solver = CCSDSolver()
         self.electron_localization_method = iao_localization
 
@@ -75,8 +60,7 @@ class DMETProblemDecomposition(ProblemDecomposition):
             float64: The DMET energy (dmet_energy).
 
         Raise:
-            RuntimeError: If the number of atoms in the fragment list doesn't
-                agree with total.
+            RuntimeError: If the number of atoms in the fragment list agrees with total.
         """
 
         # Check if the number of fragment sites is equal to the number of atoms in the molecule
@@ -104,7 +88,7 @@ class DMETProblemDecomposition(ProblemDecomposition):
         # Initialize the energy list and SCF procedure employing newton-raphson algorithm
         energy = []
         chemical_potential = 0.0
-        chemical_potential = scipy.optimize.newton(self._oneshot_loop, chemical_potential, args = (orbitals, orb_list, orb_list2, energy))
+        chemical_potential = scipy.optimize.newton(self._oneshot_loop, chemical_potential, args = (orbitals, orb_list, orb_list2, energy), tol=1e-5)
 
         # Get the final energy value
         niter = len(energy)

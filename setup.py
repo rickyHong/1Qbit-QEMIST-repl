@@ -17,11 +17,16 @@ import setuptools
 with open("README.md", "r") as readme:
     long_description = readme.read() # heh
 
-# This requires the first line of the module init to be something like:
+# This requires the a line of the module init to be something like:
 # __version__ = "0.0.1"
 with open("openqemist/__init__.py", "r") as init:
-    first_line = init.readline()
-    package_version = first_line.split("\"")[1]
+    line = init.readline()
+    while line:
+        if "__version__" in line:
+            break
+        line = init.readline()
+
+    package_version = line.split("\"")[1]
 
 setuptools.setup(
     name="openqemist",

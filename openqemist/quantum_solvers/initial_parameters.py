@@ -1,5 +1,5 @@
 #   Copyright 2019 1QBit
-#   
+#
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
 #   You may obtain a copy of the License at
@@ -14,21 +14,21 @@
 
 """Prepare the initial amplitudes for quantum simulation.
 
-The electronic structure calculation employing the 
-second-order Møller–Plesset perturbation theory (MP2)  
+The electronic structure calculation employing the
+second-order Møller–Plesset perturbation theory (MP2)
 to prepare the initial T2 amplitudes is done here.
 
 """
 
-def mp2_intitial_amplitudes(molecule, mean_field):
+def mp2_initial_amplitudes(molecule, mean_field):
     """ Computes and prepares the MP2 inital amplitudes.
 
-    Compute the inital amplitudes with PySCF MP2 calculation, 
+    Compute the inital amplitudes with PySCF MP2 calculation,
     and then reorders the elements into the QEMIST convention.
 
-    MP2 only has doubles (T2) amplitudes, thus the single (T1) amplitudes 
+    MP2 only has doubles (T2) amplitudes, thus the single (T1) amplitudes
     are set to a small non-zero value and added.
-    
+
     The ordering for QEMIST is single, double (diagonal), double (non-diagonal).
 
     Args:

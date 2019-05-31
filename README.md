@@ -1,4 +1,4 @@
-![logo](docs/img/1qbitlogo.png "1QBit is awesome!")
+![logo](http://1qbit.com/wp-content/uploads/2019/05/1qbitlogo.png "1QBit is awesome!")
 # OpenQEMIST
 [![Build Status](https://travis-ci.com/1QB-Information-Technologies/openqemist.svg?token=zt4rNJ8MTUGcpVsToGyy&branch=master)](https://travis-ci.com/1QB-Information-Technologies/openqemist)
 
@@ -33,9 +33,9 @@ for installing the .NET Core SDK and the Microsoft IQ# module.
 ### Installation from source
 To install OpenQEMIST from source, simply clone the GitHub repo and add the package
 to your ``PYTHONPATH``. The dependencies for running the project are the Microsoft
-.NET Core SDK, IQ#, and qsharp packages; pyscf; numpy; and scipy. The most current
-list of dependencies, as well as dependencies for building the documentation can
-be found in the [Dockerfile](./docker_images/Dockerfile).
+.NET Core SDK, IQ#, and qsharp packages as well as pyscf, numpy, and scipy. The
+most current list of dependencies, as well as dependencies for building the documentation
+can be found in the [Dockerfile](./docker_images/Dockerfile).
 
 ## Getting started
 
@@ -58,20 +58,26 @@ Examples and tutorials to learn how to use the different functionalities of the 
 - **openqemist** :
 The python package.
 
-## Architecture of OpenQEMIST
-
+## Architechture of OpenQEMIST
 OpenQEMIST is organized into three layers: problem decomposition, electronic
 structure solvers, and hardware backends. The problem decomposition layer is
 responsible for splitting the input molecule into smaller subproblems and
-submitting these to one (but conceivably more than one) eigenvalue solver, then
-processing these results into an output energy. Some electronic structure
-solvers use classical methods, while other use wrappers over quantum hardware
-emulators and simulators from various hardware providers. The quantum solver
-backend layer implements a common interface over libraries and emulators and
+treating these using one particular eigenvalue solver (conceivably, fragments
+could be treated using multiple solvers), then processing these results into an
+overall output energy. Some electronic structure solvers use classical methods,
+while others use wrappers over quantum algorithms running on quantum computing
+emulators and simulators from quantum platofrm providers. The quantum solver
+backend layer implements a common interface over libraries, emulators and
 simulators of quantum hardware.
 
-Currently DMET is the only implemented problem decomposition.
-VQE, FCI, and CCSD are the implemented electronic structure solvers.
+As OpenQEMIST includes a portion of functionalities incorporated in QEMIST, DMET
+is the only problem decomposition technique open sourced in our initial release.
+This release includes the Full CI and coupled-cluster with single and double
+excitations (CCSD) electronic structure solvers, as well as a quantum electronic
+structure solver based on the Variational Quantum Eigensolver  (VQE) algorithm.
+
+On the hardware backend, this initial release is integrated with Microsoft
+Quantum Development Kit for running the VQE algorithm.
 
 ## Contributing
 We welcome contributions to OpenQEMIST! Please open an issue or submit a pull request on GitHub to start the process.
