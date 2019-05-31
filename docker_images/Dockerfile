@@ -14,8 +14,8 @@ ENV LD_PRELOAD=/usr/lib64/libopenblas.so
 
 # Python modules for documentation, Jupyter notebook support, visualization
 # and some computational packages
-RUN pip3 install 'ipython==7.4.0' jupyter 'pyscf==1.6' 'openfermion==0.9.0' \
-    openfermionprojectq numpy 'scipy==1.2' setuptools wheel sphinx py3Dmol \
+RUN pip3 install 'ipython==7.4.0' jupyter 'pyscf==1.6' twine \
+    numpy 'scipy==1.2' setuptools wheel sphinx py3Dmol \
     sphinx_rtd_theme nbsphinx
 
 
