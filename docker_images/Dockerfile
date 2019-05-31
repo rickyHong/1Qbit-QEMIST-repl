@@ -15,7 +15,7 @@ ENV LD_PRELOAD=/usr/lib64/libopenblas.so
 # Python modules for documentation, Jupyter notebook support, visualization
 # and some computational packages
 RUN pip3 install 'ipython==7.4.0' jupyter 'pyscf==1.6' twine \
-    numpy 'scipy==1.2' setuptools wheel sphinx py3Dmol \
+    numpy 'scipy==1.2' matplotlib setuptools wheel sphinx py3Dmol \
     sphinx_rtd_theme nbsphinx
 
 
@@ -31,11 +31,11 @@ RUN chown root:root /etc/yum.repos.d/microsoft-prod.repo
 RUN dnf install -y dotnet-sdk-2.2
 
 # Install the IQSharp backend
-RUN dotnet tool install -g Microsoft.Quantum.IQSharp --version 0.7.1905.3003-beta
+RUN dotnet tool install -g Microsoft.Quantum.IQSharp --version 0.7.1905.3109
 RUN /root/.dotnet/tools/dotnet-iqsharp install --user
 
 # Install python package
-RUN pip3 install qsharp==0.7.1905.3003b1
+RUN pip3 install qsharp==0.7.1905.3109
 
 ########################### Finalize #############################
 

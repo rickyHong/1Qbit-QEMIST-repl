@@ -38,9 +38,9 @@ copyright = '1QBit 2019'
 author = 'Rudi Plesch, Valentin Senicourt, Yukio Kawashima, Lee Huntington, Prakash Verma, Takeshi Yamazaki, Arman Zaribafiyan'
 
 # The short X.Y version
-version = '0.0'
+version = '0.1'
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '0.1.0'
 
 
 # -- General configuration ---------------------------------------------------
