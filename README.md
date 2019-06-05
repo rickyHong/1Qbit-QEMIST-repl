@@ -1,7 +1,5 @@
 ![logo](http://1qbit.com/wp-content/uploads/2019/05/1qbitlogo.png "1QBit is awesome!")
-:visual
 
-visual
 # OpenQEMIST
 [![Build Status](https://travis-ci.com/1QB-Information-Technologies/openqemist.svg?token=zt4rNJ8MTUGcpVsToGyy&branch=master)](https://travis-ci.com/1QB-Information-Technologies/openqemist)
 
