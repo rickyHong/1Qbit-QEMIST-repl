@@ -1,4 +1,7 @@
 ![logo](http://1qbit.com/wp-content/uploads/2019/05/1qbitlogo.png "1QBit is awesome!")
+:visual
+
+visual
 # OpenQEMIST
 [![Build Status](https://travis-ci.com/1QB-Information-Technologies/openqemist.svg?token=zt4rNJ8MTUGcpVsToGyy&branch=master)](https://travis-ci.com/1QB-Information-Technologies/openqemist)
 
@@ -46,10 +49,16 @@ for example usage.
 
 Details the organization of this repository and the contents of each folder.
 
+- **benchmarks** :
+Long-running tests for the performance of algorithms on larger molecules
+
+- **docker_images** :
+The docker image that can be used to run the package.
+
 - **cont_integration** :
 Tools and script for continuous integration (versioning, automated testing, and updating documentation)
 
-- **documentation** :
+- **docs** :
 Source code documentation and user documentation
 
 - **examples** :
@@ -88,4 +97,4 @@ If you use OpenQEMIST in your research, please cite
 Takeshi Yamazaki, Shunji Matsuura, Ali Narimani, Anushervon Saidmuradov, and Arman Zaribafiyan "Towards the Practical Application of Near-Term Quantum Computers in Quantum Chemistry Simulations: A Problem Decomposition Approach" Published on [arXiv](https://arxiv.org/abs/1806.01305) on Jun 4, 2018.
 
 
-Copyright 1QBit 2019. This software is released under the Apache Software License version 2.0.
+_Copyright 1QBit 2019. This software is released under the Apache Software License version 2.0._
