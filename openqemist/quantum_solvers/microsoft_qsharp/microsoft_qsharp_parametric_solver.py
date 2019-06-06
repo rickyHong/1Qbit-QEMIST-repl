@@ -22,11 +22,14 @@ import numpy as np
 # Import python packages for Microsoft Python interops
 import qsharp
 import qsharp.chemistry as qsharpchem
+# Import the "EstimateEnergy" Q# operation from the QDK Chemistry library
+estimate_energy = qsharp.QSharpCallable("Microsoft.Quantum.Chemistry.JordanWigner.VQE.EstimateEnergy", "")
 
 # Import pyscf and functions making use of it
 from pyscf import gto, scf
 from .integrals_pyscf import compute_integrals_fragment
 from .generate_uccsd_operators import count_amplitudes, compute_cluster_operator
+
 
 class MicrosoftQSharpParametricSolver(ParametricQuantumSolver):
     """Performs an energy estimation for a molecule with a parametric circuit.
@@ -160,10 +163,10 @@ class MicrosoftQSharpParametricSolver(ParametricQuantumSolver):
 
         self.jw_hamiltonian = self._set_amplitudes(amplitudes, self.jw_hamiltonian)
 
-        # Import the "energy_evaluation" operation from a namespace defined in a Q# file. Can be user-defined.
-        estimate_energy = qsharp.QSharpCallable("Microsoft.Quantum.Chemistry.JordanWigner.VQE.EstimateEnergy", "")
+        # Compute energy
         energy = estimate_energy.simulate(jwHamiltonian=self.jw_hamiltonian, nSamples=self.n_samples)
 
+        # Update optimal amplitudes
         self.optimized_amplitudes = amplitudes
 
         return energy
@@ -206,11 +209,13 @@ class MicrosoftQSharpParametricSolver(ParametricQuantumSolver):
                 self.jw_hamiltonian = qsharpchem.encode(fh_copy, self.inputstate)
 
                 # Compute RDM value
-                RDM_value = self.simulate(amplitudes) #- self.jw_hamiltonian[3]
+                RDM_value = self.simulate(amplitudes)
 
                 # Update RDM matrices
                 ferm_ops = single_fh[1][0][0][0]
                 indices = [ferm_op[1] for ferm_op in ferm_ops]
+
+                # 1-RDM matrix
                 if (len(term_type) == 2):
                     i, j = indices[0]//2, indices[1]//2
                     if (i == j):
@@ -219,21 +224,35 @@ class MicrosoftQSharpParametricSolver(ParametricQuantumSolver):
                         one_rdm[i, j] += RDM_value
                         one_rdm[j, i] += RDM_value
 
+                # 2-RDM matrix (works with Microsoft Chemistry library sign convention)
                 elif (len(term_type) == 4):
                     i, j, k, l = indices[0]//2, indices[1]//2, indices[2]//2, indices[3]//2
-                    if((indices[0]!=indices[3]) or (indices[1]!=indices[2])):
-                        two_rdm[l,i,k,j] += RDM_value
-                        two_rdm[i,l,j,k] += RDM_value
-                        two_rdm[k,j,l,i] += RDM_value
-                        two_rdm[j,k,i,l] += RDM_value
+
+                    if((indices[0]==indices[3]) and (indices[1]==indices[2])):
+                        if((indices[0]%2 == indices[2]%2) and (indices[1]%2 == indices[3]%2)):
+                            two_rdm[i,l,j,k] += RDM_value
+                            two_rdm[j,k,i,l] += RDM_value
+                            two_rdm[i,k,j,l] -= RDM_value
+                            two_rdm[j,l,i,k] -= RDM_value
+                        else:
+                            two_rdm[i,l,j,k] += RDM_value
+                            two_rdm[j,k,i,l] += RDM_value
                     else:
-                        two_rdm[i,l,j,k] += RDM_value
-                        two_rdm[j,k,i,l] += RDM_value
-
-
-        if self.verbose:
-            print("one_rdm :\n", one_rdm, "\n\n\n")
-            print("two_rdm :\n", two_rdm, "\n\n\n")
+                        if((indices[0]%2 == indices[3]%2) and (indices[1]%2 == indices[2]%2)):
+                            two_rdm[i,l,j,k] += RDM_value
+                            two_rdm[j,k,i,l] += RDM_value
+                            two_rdm[l,i,k,j] += RDM_value
+                            two_rdm[k,j,l,i] += RDM_value
+                            if((indices[0]%2 == indices[2]%2) and (indices[1]%2 == indices[3]%2)):
+                                two_rdm[i,k,j,l] -= RDM_value
+                                two_rdm[j,l,i,k] -= RDM_value
+                                two_rdm[k,i,l,j] -= RDM_value
+                                two_rdm[l,j,k,i] -= RDM_value
+                        else:
+                            two_rdm[i,k,j,l] -= RDM_value
+                            two_rdm[j,l,i,k] -= RDM_value
+                            two_rdm[k,i,l,j] -= RDM_value
+                            two_rdm[l,j,k,i] -= RDM_value
 
         return (one_rdm, two_rdm)
 
@@ -247,12 +266,7 @@ class MicrosoftQSharpParametricSolver(ParametricQuantumSolver):
         # Update the cluster operator with the new variational parameters
         ref, new_operator = compute_cluster_operator(self.n_qubits, self.n_electrons, amplitudes, True, operator)
 
-        if self.verbose:
-            print("New operator")
-            print(new_operator, "\n\n")
-
 	# Re-pack the data-structure
         input_state = (b1, new_operator)
         jw_hamiltonian = (a1, a2, input_state, a3)
         return jw_hamiltonian
-

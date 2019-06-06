@@ -55,7 +55,7 @@ class VQESolverTest(unittest.TestCase):
 
         energy = solver.simulate(mol)
 
-        self.assertAlmostEqual(energy, -1.1372704178510415, places=3)
+        self.assertAlmostEqual(energy, -1.1372704178510415, delta=1e-3)
 
     def test_h2_321g(self):
         from openqemist.quantum_solvers import MicrosoftQSharpParametricSolver
@@ -74,7 +74,7 @@ class VQESolverTest(unittest.TestCase):
 
         energy = solver.simulate(mol)
 
-        self.assertAlmostEqual(energy, -1.1478300615818977, places=3)
+        self.assertAlmostEqual(energy, -1.1478300615818977, delta=1e-3)
 
     def test_h4_sto3g(self):
         from openqemist.quantum_solvers import MicrosoftQSharpParametricSolver
@@ -92,7 +92,7 @@ class VQESolverTest(unittest.TestCase):
 
         energy = solver.simulate(mol)
 
-        # FCI is -1.9786006610379836, however UCCSD seems to converge to
+        # FCI is -1.9786006610379836, however VQE UCCSD seems to converge to
         # -1.9778376625571703 for several backends and optimizers,
         # which is still within chemical accuracy
         self.assertAlmostEqual(energy, -1.9786006610379836, delta=1e-3)
@@ -113,7 +113,7 @@ class VQESolverTest(unittest.TestCase):
         #solver.optimizer =
         energy = solver.simulate(mol)
 
-        self.assertAlmostEqual(energy, -7.881855622231621, places=3)
+        self.assertAlmostEqual(energy, -7.881855622231621, delta=1e-3)
 
 if __name__ == "__main__":
     unittest.main()
