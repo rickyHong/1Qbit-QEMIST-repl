@@ -37,10 +37,22 @@ project = 'OpenQEMIST'
 copyright = '1QBit 2019'
 author = 'Rudi Plesch, Valentin Senicourt, Yukio Kawashima, Lee Huntington, Prakash Verma, Takeshi Yamazaki, Arman Zaribafiyan'
 
+# This requires the a line of the module init to be something like:
+# __version__ = "0.0.1"
+with open("../openqemist/__init__.py", "r") as init:
+    line = init.readline()
+    while line:
+        if "__version__" in line:
+            break
+        line = init.readline()
+
+    package_version = line.split("\"")[1]
+
+version_list = package_version.split(".")
 # The short X.Y version
-version = '0.1'
+version = ".".join(version_list[0:2])
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = package_version
 
 
 # -- General configuration ---------------------------------------------------

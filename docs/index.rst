@@ -9,6 +9,7 @@ Welcome to the 1QBit OpenQEMIST documentation!
    refman/modules
    dmet_microsoft_qsharp
    vqe_microsoft_qsharp
+   release_notes
 
 
 Harnessing the combined power of emerging quantum computing technologies and
