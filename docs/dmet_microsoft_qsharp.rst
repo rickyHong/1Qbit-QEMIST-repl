@@ -1,6 +1,18 @@
+.. Copyright 1QBit 2019.
 
 OpenQEMIST-DMET with Microsoft Quantum Development Kit Libraries
 ================================================================
+
+This tutorial assumes users have installed:
+
+-  the Microsoft .NET Core SDK, IQ# and the qsharp Python package
+-  the openqemist Python package
+
+A simple way to set up your environment is to use the docker image
+provided
+`here <https://github.com/1QB-Information-Technologies/openqemist/tree/master/docker_images>`__.
+Otherwise, installation instructions can be found at
+https://github.com/1QB-Information-Technologies/openqemist.
 
 1. Introduction
 ---------------
